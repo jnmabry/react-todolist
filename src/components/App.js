@@ -3,69 +3,64 @@ import PropTypes from 'prop-types';
 import logo from '../logo.svg';
 import '../App.css';
 
-export const TODOS = [
-  {
-    todo: "Check the mail",
-      id: 1,
-  },
+const TODOS = [
     {
-    todo: "Walk the dog",
-    id: 2,
-  },
+        todo: "Check the mail",
+        id: 1,
+    },
     {
-    todo: "Feed the cat",
-    id: 3,
-  },
-  {
-  todo: "Cook dinner",
-    id: 4,
-  },
-  {
-    todo: "Get a haircut",
-    id: 5,
-  },
+        todo: "Walk the dog",
+        id: 2,
+    },
+    {
+        todo: "Feed the cat",
+        id: 3,
+    },
+    {
+        todo: "Cook dinner",
+        id: 4,
+    },
+    {
+        todo: "Get a haircut",
+        id: 5,
+    },
 ];
 
-class ToDo extends Component {
-
-    constructor(props){
-        super(props);
-        this.state = {todoItem: "Add some todos"};
-    }
-
-    render() {
-      return (
-          <li className="todo-list-item">{this.props.todoItem}
+const TodoList = (props) => {
+    const todoItems = props.todoItems.map(todo =>
+        <li className="todo-list-item" key={todo.id}>{todo.todo}
             <button>X</button>
-          </li>
-      );
-    }
+        </li>);
+
+    return <ul className="todo-list">{todoItems}</ul>
+}
+
+TodoList.propTypes = {
+    todoItems: PropTypes.arrayOf(PropTypes.shape({
+        todo: PropTypes.string.isRequired,
+        id: PropTypes.number.isRequired,
+    }).isRequired).isRequired,
 }
 
 class App extends Component {
 
-    constructor(props) {
+    todoCounter = 6;
+
+    constructor(props){
         super(props);
-        this.state = {value: ''};
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.state = {todoItems: TODOS, value: ""};
+        this.updateInput = this.updateInput.bind(this);
+        this.addTodo = this.addTodo.bind(this);
     }
 
-
-    handleChange(event) {
-        this.setState({value: event.target.value});
-    }
-
-    handleSubmit(event) {
-        console.log('A name was submitted: ' + this.state.value);
+    addTodo(event){
+        TODOS.push({id:this.todoCounter++, todo: this.state.value});
+        this.setState({todoItems: TODOS});
         event.preventDefault();
     }
 
-    static propTypes = {
-        todoItems: PropTypes.arrayOf(PropTypes.shape({
-            todo: PropTypes.string.isRequired,
-            id: PropTypes.number.isRequired,
-        }).isRequired).isRequired,
+    updateInput(event){
+        this.setState({value: event.target.value});
     }
 
     render() {
@@ -74,16 +69,13 @@ class App extends Component {
         <div className="container">
           <h1>React ToDo List</h1>
           <div className="add-todos">
-            <form onSubmit={this.handleSubmit}>
-                <input type="text" value={this.state.value} onChange={this.handleChange} />
-                <input type="submit" value="Submit" />
-            </form>
+              <form onSubmit={this.addTodo}>
+                  <input type="text" value={this.state.value} onChange={this.updateInput} />
+                  <input type="submit" value="Submit" />
+              </form>
           </div>
           <div className="todos">
-            <ul className="todo-list">
-              {TODOS.map((todo) =>
-              <ToDo todoItem={todo.todo} key={todo.id}/>)}
-            </ul>
+            <TodoList todoItems={this.state.todoItems}/>
           </div>
         </div>
       </div>
