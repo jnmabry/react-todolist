@@ -1,0 +1,26 @@
+.wrapper {
+  background-color: red;
+  width: 400px;
+  height: 400px;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);  
+}
+
+.container {
+  padding: 20px;
+}
+
+.add-todos {
+  text-align: center;
+}
+
+.todos-list {
+  text-align: left;
+}
+
+h1 {
+  text-align: center;
+}
