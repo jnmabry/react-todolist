@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import logo from '../logo.svg';
 import '../App.css';
 
-const TODOS = [
+export const TODOS = [
   {
     todo: "Check the mail",
       id: 1,
@@ -26,34 +26,59 @@ const TODOS = [
   },
 ];
 
-function ToDo(props) {
-  return(
-    <li className="todo-list-item">{props.todoItem}
-      <button>X</button>
-    </li>
-  );
-}
+class ToDo extends Component {
 
-ToDo.propTypes = {
-  todoItem: PropTypes.string.isRequired,
-}
+    constructor(props){
+        super(props);
+        this.state = {todoItem: "Add some todos"};
+    }
 
-function AddToDos() {
-  return(
-    <div className="add-todos">
-      <input type="text"/>
-      <input type="submit" value="add"/>
-    </div>
-  );
+    render() {
+      return (
+          <li className="todo-list-item">{this.props.todoItem}
+            <button>X</button>
+          </li>
+      );
+    }
 }
 
 class App extends Component {
-  render() {
+
+    constructor(props) {
+        super(props);
+        this.state = {value: ''};
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+
+    handleChange(event) {
+        this.setState({value: event.target.value});
+    }
+
+    handleSubmit(event) {
+        console.log('A name was submitted: ' + this.state.value);
+        event.preventDefault();
+    }
+
+    static propTypes = {
+        todoItems: PropTypes.arrayOf(PropTypes.shape({
+            todo: PropTypes.string.isRequired,
+            id: PropTypes.number.isRequired,
+        }).isRequired).isRequired,
+    }
+
+    render() {
     return (
       <div className="wrapper">
         <div className="container">
           <h1>React ToDo List</h1>
-          <AddToDos/>
+          <div className="add-todos">
+            <form onSubmit={this.handleSubmit}>
+                <input type="text" value={this.state.value} onChange={this.handleChange} />
+                <input type="submit" value="Submit" />
+            </form>
+          </div>
           <div className="todos">
             <ul className="todo-list">
               {TODOS.map((todo) =>
@@ -64,13 +89,8 @@ class App extends Component {
       </div>
     );
   }
+
 }
 
-App.propTypes = {
-  todoItems: PropTypes.arrayOf(PropTypes.shape({
-      todo: PropTypes.string.isRequired,
-      id: PropTypes.number.isRequired,
-  }).isRequired).isRequired,
-};
-
 export default App;
+
