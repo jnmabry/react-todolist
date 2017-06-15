@@ -24,3 +24,9 @@
 h1 {
   text-align: center;
 }
+
+.active {
+    font-size: 20px;
+    background-color: black;
+    color: white;
+}
